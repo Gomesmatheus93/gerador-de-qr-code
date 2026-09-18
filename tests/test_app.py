@@ -1,6 +1,8 @@
 import re
 
 from app.models import QRCode, QRScan
+from app.models import User
+from app.services.security import verify_password
 from app.services.tracking import anonymized_ip
 from app.services.stats import report_data
 from app.models import utcnow
@@ -105,3 +107,28 @@ def test_web_form_creation(client):
     assert created.status_code == 303
     assert http.get(created.headers["location"]).status_code == 200
     assert http.get("/q/unidade-centro").headers["location"] == "https://example.org/?utm_source=qrcode"
+
+
+def test_static_assets_use_https_safe_paths(client):
+    http, _ = client
+    login_page = http.get("/login", headers={"host": "example.com", "x-forwarded-proto": "https"})
+    assert 'href="/static/styles.css"' in login_page.text
+    assert login(http).status_code == 303
+    dashboard = http.get("/dashboard", headers={"host": "example.com", "x-forwarded-proto": "https"})
+    assert 'href="/static/styles.css"' in dashboard.text
+    assert 'src="/static/app.js"' in dashboard.text
+    assert http.get("/static/styles.css").status_code == 200
+
+
+def test_admin_password_can_be_rotated(client, monkeypatch):
+    _, session_factory = client
+    import app.cli as cli
+
+    monkeypatch.setattr(cli, "SessionLocal", session_factory)
+    monkeypatch.setenv("ADMIN_EMAIL", "admin@example.com")
+    monkeypatch.setenv("ADMIN_PASSWORD", "a-new-strong-password")
+    cli.reset_admin_password()
+    with session_factory() as db:
+        user = db.query(User).filter_by(email="admin@example.com").one()
+        assert verify_password("a-new-strong-password", user.password_hash)
+        assert not verify_password("correct-password", user.password_hash)

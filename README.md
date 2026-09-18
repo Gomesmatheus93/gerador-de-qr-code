@@ -45,6 +45,8 @@ uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 
 O comando `seed-admin` é idempotente: cria o usuário somente na primeira execução. Novas migrations podem ser criadas com `alembic revision --autogenerate -m "descrição"`, revisadas e aplicadas com `alembic upgrade head`. Não use `Base.metadata.create_all()` em produção.
 
+Para trocar a senha administrativa existente, atualize `ADMIN_PASSWORD` no ambiente do serviço, reinicie ou recrie o contêiner para carregar o novo valor e execute `python -m app.cli reset-admin-password` dentro dele. Alterar apenas a variável não muda o hash já salvo no banco. Trocar `SECRET_KEY` invalida as sessões atuais.
+
 ### Escanear com o celular na rede local
 
 `localhost` só funciona no próprio dispositivo. Para escanear com um celular, use o IP do computador na rede Wi-Fi em `BASE_URL` (por exemplo, `http://192.168.1.10:8000`) e inicie o servidor com `--host 0.0.0.0`. O computador e o celular devem estar na mesma rede. Recarregue a página do QR Code e baixe a imagem novamente após alterar `BASE_URL`: imagens antigas continuam contendo o endereço anterior. Um IP local pode mudar e não funciona fora da rede; para QR Codes permanentes e públicos, use um domínio estável com HTTPS.
