@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrar · QR Atlas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+</head>
+<body class="login-body">
+  <div class="login-shell">
+    <div class="login-story"><div class="brand light"><span class="brand-mark">◈</span><span>QR <strong>Atlas</strong><small>GESTÃO INTELIGENTE</small></span></div><div><span class="eyebrow light-eyebrow">CONTROLE EM CADA SCAN</span><h1>Um QR Code.<br>Infinitos caminhos.</h1><p>Crie, acompanhe e atualize seus QR Codes em um só lugar.</p></div><div class="story-footer">Links permanentes. Dados claros. Decisões melhores.</div></div>
+    <div class="login-area"><div class="login-card"><span class="eyebrow">BEM-VINDO DE VOLTA</span><h2>Entre na sua conta</h2><p class="text-muted">Acesse o painel para acompanhar seus QR Codes.</p>{% if error %}<div class="alert alert-danger" role="alert">{{ error }}</div>{% endif %}<form method="post" action="/login"><input type="hidden" name="csrf" value="{{ csrf_token }}"><div class="mb-3"><label class="form-label" for="email">E-mail</label><input class="form-control form-control-lg" id="email" name="email" type="email" autocomplete="username" required autofocus placeholder="voce@empresa.com"></div><div class="mb-4"><label class="form-label" for="password">Senha</label><input class="form-control form-control-lg" id="password" name="password" type="password" autocomplete="current-password" required placeholder="Sua senha"></div><button class="btn btn-primary btn-lg w-100" type="submit">Entrar no painel <span aria-hidden="true">→</span></button></form><p class="login-note">Acesso reservado aos administradores.</p></div></div>
+  </div>
+</body>
+</html>

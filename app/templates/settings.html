@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Configurações{% endblock %}
+{% block content %}
+<div class="page-heading"><div><span class="eyebrow">SISTEMA</span><h1>Configurações</h1><p>Parâmetros operacionais desta instalação.</p></div></div>
+<section class="surface settings-surface"><div class="surface-heading"><div><span class="eyebrow">AMBIENTE</span><h2>Configuração atual</h2></div></div><dl class="info-list"><div><dt>URL base dos QR Codes</dt><dd><code>{{ app_settings.base_url }}</code></dd></div><div><dt>Ambiente</dt><dd>{{ app_settings.environment }}</dd></div><div><dt>Anonimização de IP</dt><dd>{{ 'Ativa' if app_settings.anonymize_ip else 'Desativada' }}</dd></div><div><dt>Geolocalização aproximada</dt><dd>{{ 'Banco local configurado' if app_settings.geoip_db_path else 'Indisponível' }}</dd></div><div><dt>Documentação da API</dt><dd><a href="/docs">Abrir Swagger / OpenAPI →</a></dd></div></dl><p class="form-text mt-3">Altere os parâmetros no arquivo .env ou nas variáveis do ambiente e reinicie a aplicação. Mudanças de BASE_URL exigem manter o domínio anterior ativo para preservar QR Codes já impressos.</p></section>
+{% endblock %}
